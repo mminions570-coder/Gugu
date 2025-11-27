@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>End of Conversation 😒😒</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef, #ffecd2);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.6s ease-out;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+
+        .chat-header {
+            background: linear-gradient(135deg, #e91e63, #ff6b9d);
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+        }
+
+
+        .chat-header h2 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+
+        .chat-header p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #e91e63;
+            border-radius: 10px;
+        }
+
+
+        .message {
+            display: flex;
+            animation: messageSlide 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        .message.anshi {
+            justify-content: flex-end;
+        }
+
+
+        .message.gugu {
+            justify-content: flex-start;
+        }
+
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            animation: bubblePop 0.4s ease-out;
+        }
+
+
+        @keyframes bubblePop {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+
+        .message.anshi .message-bubble {
+            background: #e91e63;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+
+        .message.gugu .message-bubble {
+            background: #f0f0f0;
+            color: #333;
+            border-bottom-left-radius: 4px;
+        }
+
+
+        .timestamp {
+            font-size: 0.75em;
+            opacity: 0.7;
+            margin-top: 5px;
+            margin-left: 5px;
+        }
+
+
+        .message.anshi .timestamp {
+            text-align: right;
+            margin-left: auto;
+            margin-right: 5px;
+        }
+
+
+        .chat-footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+            border-radius: 0 0 20px 20px;
+        }
+
+
+        .tap-instruction {
+            font-size: 0.9em;
+            color: white;
+            margin-bottom: 10px;
+            font-style: italic;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+
+        .back-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+
+        .back-btn:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+        }
+
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        /* Floating Hearts Background */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+
+        .floating-heart {
+            position: absolute;
+            color: #e91e63;
+            opacity: 0;
+            animation: floatUp 5s linear infinite;
+            will-change: transform, opacity;
+            user-select: none;
+        }
+
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+
+        .speaker-name {
+            font-size: 0.8em;
+            font-weight: bold;
+            opacity: 0.7;
+            margin-bottom: 3px;
+            margin-left: 5px;
+        }
+
+
+        .message.anshi .speaker-name {
+            text-align: right;
+            margin-right: 5px;
+            margin-left: 0;
+            color: #e91e63;
+        }
+
+
+        .message.gugu .speaker-name {
+            color: #666;
+        }
+
+
+        @media (max-width: 600px) {
+            .chat-container {
+                height: 70vh;
+                max-width: 95%;
+            }
+
+
+            .message-bubble {
+                max-width: 85%;
+            }
+
+
+            .chat-header h2 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts -->
+    <div class="hearts" id="hearts"></div>
+
+
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <h2>End of Conversation 😒😒</h2>
+            <div class="tap-instruction" id="tapInstruction">Tap to reveal messages</div>
+        </div>
+
+
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be inserted here by JavaScript -->
+        </div>
+
+
+        <div class="chat-footer">
+            <a href="Shy-girl-popup.html" class="back-btn">Back to suffer</a>
+        </div>
+    </div>
+
+
+    <script>
+        // Conversation data
+        const conversations = [
+            { speaker: 'anshi', text: 'yaarle ni' },
+            { speaker: 'gugu', text: 'Anusha da hudga........sorry.......sorry........' },
+            { speaker: 'gugu', text: 'anshi da hudga!!' },
+            { speaker: 'gugu', text: 'adrag anshi patil da hudga' },
+            { speaker: 'gugu', text: 'matta avar papa byada nang' },
+            { speaker: 'anshi', text: 'loude 😒😒' }
+        ];
+
+
+        const chatMessagesDiv = document.getElementById('chatMessages');
+        const chatContainer = document.getElementById('chatContainer');
+        const tapInstruction = document.getElementById('tapInstruction');
+        let messageIndex = 0;
+
+
+        function addMessage() {
+            if (messageIndex < conversations.length) {
+                const conv = conversations[messageIndex];
+                const messageEl = document.createElement('div');
+                messageEl.className = `message ${conv.speaker}`;
+
+
+                const isAnshi = conv.speaker === 'anshi';
+                const currentTime = new Date().toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: true 
+                });
+
+
+                const speakerLabel = isAnshi ? '💕 Anshi' : '💚 Gugu';
+
+
+                if (messageIndex === 0 || messageIndex === conversations.length - 1) {
+                    // First and last message - pushed to extreme right
+                    messageEl.innerHTML = `
+                        <div style="width: 100%; text-align: right; display: flex; flex-direction: column; align-items: flex-end;">
+                            <div class="speaker-name">${speakerLabel}</div>
+                            <div class="message-bubble" style="margin-right: 0;">${conv.text}</div>
+                            <div class="timestamp">${currentTime}</div>
+                        </div>
+                    `;
+                } else {
+                    messageEl.innerHTML = `
+                        <div style="width: 100%; ${isAnshi ? 'text-align: right;' : 'text-align: left;'}">
+                            <div class="speaker-name">${speakerLabel}</div>
+                            <div class="message-bubble">${conv.text}</div>
+                            <div class="timestamp">${currentTime}</div>
+                        </div>
+                    `;
+                }
+
+
+                chatMessagesDiv.appendChild(messageEl);
+                
+                // Auto scroll to bottom
+                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+
+
+                messageIndex++;
+            }
+        }
+
+
+        // Add message on tap/click
+        chatContainer.addEventListener('click', addMessage);
+
+
+        // Floating Hearts Animation
+        const heartCount = 12;
+        const heartsDiv = document.getElementById('hearts');
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.textContent = '♥';
+            let leftPercent;
+            if (i < heartCount * 0.4) {
+                leftPercent = Math.random() * 45;
+            } else {
+                leftPercent = 55 + Math.random() * 40;
+            }
+            heart.style.left = `${leftPercent}%`;
+            heart.style.top = `${-20 + Math.random() * 40}vh`;
+            heart.style.animationDelay = `${Math.random() * 2.5}s`;
+            heart.style.animationDuration = `${4 + Math.random() * 2}s`;
+            heart.style.fontSize = `${1.7 + Math.random() * 1.6}em`;
+            heartsDiv.appendChild(heart);
+        }
+    </script>
+</body>
+</html>

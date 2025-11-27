@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Game</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef, #ffecd2);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Hearts Animation Background */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: #e91e63;
+            opacity: 0;
+            animation: floatUp 5s linear infinite;
+            will-change: transform, opacity;
+            user-select: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out;
+            position: relative;
+            z-index: 2;
+        }
+        h1 {
+            font-size: 3em;
+            color: #e91e63;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .status {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #666;
+            font-weight: 600;
+        }
+        .game-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: fit-content;
+            margin: 30px auto;
+        }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 10px;
+            background: #e91e63;
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border: none;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #e91e63;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .cell:hover {
+            background: #ffecd2;
+            transform: scale(1.05);
+        }
+        .cell:active {
+            transform: scale(0.98);
+        }
+        .reset-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 20px 10px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .reset-btn:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+        }
+        .back-btn {
+            background: #757575;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 0.95em;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            font-weight: 600;
+            margin: 10px;
+        }
+        .back-btn:hover {
+            background: #424242;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Winner Popup Animation */
+        .winner-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(233, 30, 99, 0.4);
+            z-index: 100;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .winner-popup.show {
+            animation: popupBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 1;
+        }
+        .winner-popup h2 {
+            font-size: 2.5em;
+            color: #e91e63;
+            margin: 0 0 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .winner-popup p {
+            font-size: 1.5em;
+            color: #666;
+            margin: 0;
+        }
+        @keyframes popupBounce {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+        }
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            z-index: 99;
+            pointer-events: none;
+        }
+        .confetti-piece {
+            animation: confettiFall 3s ease-in forwards;
+        }
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hearts Animation Background -->
+    <div class="hearts" id="hearts"></div>
+
+    <div class="winner-popup" id="winnerPopup">
+        <h2 id="winnerText"></h2>
+        <p>🎉 Congratulations! 🎉</p>
+    </div>
+
+    <div class="container">
+        <h1>Tic Tac Toe (X & O)</h1>
+        <div class="status" id="status">Player X's Turn</div>
+
+        <div class="game-wrapper">
+            <div class="game-board" id="gameBoard">
+                <button class="cell" data-index="0"></button>
+                <button class="cell" data-index="1"></button>
+                <button class="cell" data-index="2"></button>
+                <button class="cell" data-index="3"></button>
+                <button class="cell" data-index="4"></button>
+                <button class="cell" data-index="5"></button>
+                <button class="cell" data-index="6"></button>
+                <button class="cell" data-index="7"></button>
+                <button class="cell" data-index="8"></button>
+            </div>
+        </div>
+
+        <div>
+            <button class="reset-btn" onclick="resetGame()">Reset Game</button>
+        </div>
+
+        <a href="fun.html" class="back-btn">Back to HIM N I</a>
+    </div>
+
+    <script>
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+        let popupShown = false;
+
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        const cells = document.querySelectorAll('.cell');
+        const statusDisplay = document.getElementById('status');
+        const winnerPopup = document.getElementById('winnerPopup');
+        const winnerText = document.getElementById('winnerText');
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', handleCellClick);
+        });
+
+        function handleCellClick(e) {
+            const index = e.target.dataset.index;
+            
+            if (gameBoard[index] !== '' || !gameActive) {
+                return;
+            }
+
+            gameBoard[index] = currentPlayer;
+            e.target.textContent = currentPlayer;
+
+            if (checkWinner()) {
+                statusDisplay.textContent = `Finally Obito you won Rin 💕`;
+                gameActive = false;
+                if (!popupShown) {
+                    showWinnerPopup();
+                    createConfetti();
+                    popupShown = true;
+                }
+                return;
+            }
+
+            if (gameBoard.every(cell => cell !== '')) {
+                statusDisplay.textContent = "It's a Draw!";
+                gameActive = false;
+                if (!popupShown) {
+                    showDrawPopup();
+                    popupShown = true;
+                }
+                return;
+            }
+
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            statusDisplay.textContent = `Player ${currentPlayer}'s Turn`;
+        }
+
+        function checkWinner() {
+            return winningConditions.some(condition => {
+                const [a, b, c] = condition;
+                return gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c];
+            });
+        }
+
+        function showWinnerPopup() {
+            winnerText.textContent = `Finally Obito you won Rin 💕`;
+            winnerPopup.classList.add('show');
+        }
+
+        function showDrawPopup() {
+            winnerText.textContent = "It's a Draw!";
+            winnerPopup.classList.add('show');
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti confetti-piece';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.background = ['#e91e63', '#ff9a9e', '#fecfef', '#ffecd2'][Math.floor(Math.random() * 4)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.borderRadius = '50%';
+                confetti.style.animation = `confettiFall ${2 + Math.random() * 1}s ease-in forwards`;
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function resetGame() {
+            currentPlayer = 'X';
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            popupShown = false;
+            statusDisplay.textContent = `Player ${currentPlayer}'s Turn`;
+            cells.forEach(cell => {
+                cell.textContent = '';
+            });
+            winnerPopup.classList.remove('show');
+        }
+
+        // Initialize Floating Hearts Animation
+        function initializeHearts() {
+            const heartCount = 14;
+            const heartsDiv = document.getElementById('hearts');
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.textContent = '♥';
+                
+                let leftPercent;
+                if (i < heartCount * 0.4) {
+                    leftPercent = Math.random() * 45;
+                } else {
+                    leftPercent = 55 + Math.random() * 40;
+                }
+                
+                heart.style.left = `${leftPercent}%`;
+                heart.style.top = `${-20 + Math.random() * 40}vh`;
+                heart.style.animationDelay = `${Math.random() * 2.5}s`;
+                heart.style.animationDuration = `${4 + Math.random() * 2}s`;
+                heart.style.fontSize = `${1.7 + Math.random() * 1.6}em`;
+                
+                heartsDiv.appendChild(heart);
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', initializeHearts);
+    </script>
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin The Wheel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef, #ffecd2);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Hearts Animation Background */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: #e91e63;
+            opacity: 0;
+            animation: floatUp 5s linear infinite;
+            will-change: transform, opacity;
+            user-select: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #e91e63;
+            margin-bottom: 10px;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .wheel-wrapper {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pointer {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 50px solid #e91e63;
+            z-index: 30;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.4));
+        }
+
+        .wheel {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            position: relative;
+            background: conic-gradient(
+                from 0deg,
+                #FF6B9D 0deg 45deg,
+                #FFA500 45deg 90deg,
+                #FFD700 90deg 135deg,
+                #FF69B4 135deg 180deg,
+                #FF1493 180deg 225deg,
+                #E91E63 225deg 270deg,
+                #C2185B 270deg 315deg,
+                #FF8FB1 315deg 360deg
+            );
+            box-shadow: 0 0 0 8px #333, 0 0 0 10px #e91e63, 0 20px 60px rgba(233, 30, 99, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(0deg);
+            outline: none;
+            border: none;
+        }
+
+        .wheel.spinning {
+            animation: spin 5s cubic-bezier(0.17, 0.67, 0.12, 0.98) forwards;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(var(--rotation));
+            }
+        }
+
+        .wheel-border-dots {
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+            border: 2px solid white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .dot1 { transform: translate(-50%, -50%) rotate(0deg) translateY(-160px) rotate(0deg); }
+        .dot2 { transform: translate(-50%, -50%) rotate(45deg) translateY(-160px) rotate(-45deg); }
+        .dot3 { transform: translate(-50%, -50%) rotate(90deg) translateY(-160px) rotate(-90deg); }
+        .dot4 { transform: translate(-50%, -50%) rotate(135deg) translateY(-160px) rotate(-135deg); }
+        .dot5 { transform: translate(-50%, -50%) rotate(180deg) translateY(-160px) rotate(-180deg); }
+        .dot6 { transform: translate(-50%, -50%) rotate(225deg) translateY(-160px) rotate(-225deg); }
+        .dot7 { transform: translate(-50%, -50%) rotate(270deg) translateY(-160px) rotate(-270deg); }
+        .dot8 { transform: translate(-50%, -50%) rotate(315deg) translateY(-160px) rotate(-315deg); }
+
+        .wheel-labels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .label {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+            font-size: 0.95em;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .label1 { transform: rotate(22.5deg); }
+        .label2 { transform: rotate(67.5deg); }
+        .label3 { transform: rotate(112.5deg); }
+        .label4 { transform: rotate(157.5deg); }
+        .label5 { transform: rotate(202.5deg); }
+        .label6 { transform: rotate(247.5deg); }
+        .label7 { transform: rotate(292.5deg); }
+        .label8 { transform: rotate(337.5deg); }
+
+        .label-text {
+            transform: translateY(-145px);
+            width: 100px;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+        }
+
+        .wheel-center {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            border: 4px solid #333;
+            font-weight: bold;
+            color: #e91e63;
+            pointer-events: none;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .spin-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            outline: none;
+        }
+
+        .spin-btn:hover {
+            background: #c2185b;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(233, 30, 99, 0.4);
+        }
+
+        .spin-btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .back-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 0.95em;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .back-btn:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        /* Scroll Down Animation */
+        .scroll-down {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 500;
+            pointer-events: none;
+        }
+
+        .scroll-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: scrollBounce 2s infinite;
+        }
+
+        .arrow-icon {
+            font-size: 28px;
+            color: #e91e63;
+            opacity: 0.8;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .scroll-text {
+            font-size: 0.85em;
+            color: #e91e63;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(10px);
+                opacity: 0.5;
+            }
+        }
+
+        .scroll-down.hidden {
+            display: none;
+        }
+
+        /* Popup Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: popUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            box-shadow: 0 30px 80px rgba(233, 30, 99, 0.4);
+            border: 3px solid #e91e63;
+            outline: none;
+        }
+
+        @keyframes popUp {
+            from {
+                transform: translate(-50%, -50%) scale(0.3);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal.show {
+            display: block;
+        }
+
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            outline: none;
+            background: none;
+            border: none;
+        }
+
+        .close-modal:hover {
+            color: #e91e63;
+        }
+
+        .result-emoji {
+            font-size: 3em;
+            margin: 20px 0;
+        }
+
+        .result-text {
+            font-size: 1.8em;
+            color: #e91e63;
+            font-weight: bold;
+            margin: 20px 0;
+            line-height: 1.3;
+        }
+
+        .result-description {
+            font-size: 1.1em;
+            color: #666;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+
+        .close-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 20px;
+            outline: none;
+        }
+
+        .close-btn:hover {
+            background: #c2185b;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .wheel-wrapper {
+                width: 320px;
+                height: 320px;
+            }
+
+            .wheel {
+                width: 260px;
+                height: 260px;
+            }
+
+            .pointer {
+                border-left: 18px solid transparent;
+                border-right: 18px solid transparent;
+                border-top: 35px solid #e91e63;
+            }
+
+            .label-text {
+                transform: translateY(-115px);
+                font-size: 0.85em;
+                width: 80px;
+            }
+
+            .wheel-center {
+                width: 65px;
+                height: 65px;
+                font-size: 2em;
+            }
+
+            .spin-btn {
+                padding: 12px 40px;
+                font-size: 1em;
+            }
+
+            .modal-content {
+                padding: 30px;
+                width: 85%;
+            }
+
+            .result-text {
+                font-size: 1.4em;
+            }
+
+            .result-description {
+                font-size: 1em;
+            }
+
+            .result-emoji {
+                font-size: 2.5em;
+            }
+
+            .scroll-down {
+                bottom: 20px;
+            }
+
+            .arrow-icon {
+                font-size: 24px;
+            }
+
+            .scroll-text {
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hearts Animation Background -->
+    <div class="hearts" id="hearts"></div>
+
+    <!-- Scroll Down Indicator -->
+    <div class="scroll-down" id="scrollDown">
+        <div class="scroll-arrow">
+            <span class="scroll-text">Scroll Down</span>
+            <span class="arrow-icon">↓</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Spin The Wheel! 🎡</h1>
+        <p class="subtitle">What should we do today? 💕</p>
+
+        <div class="wheel-wrapper">
+            <div class="pointer"></div>
+            <div class="wheel" id="wheel">
+                <div class="wheel-border-dots">
+                    <div class="dot dot1"></div>
+                    <div class="dot dot2"></div>
+                    <div class="dot dot3"></div>
+                    <div class="dot dot4"></div>
+                    <div class="dot dot5"></div>
+                    <div class="dot dot6"></div>
+                    <div class="dot dot7"></div>
+                    <div class="dot dot8"></div>
+                </div>
+                <div class="wheel-labels">
+                    <div class="label label1"><div class="label-text">Tell me why you love me</div></div>
+                    <div class="label label2"><div class="label-text">Send a voice note</div></div>
+                    <div class="label label3"><div class="label-text">Plan a date</div></div>
+                    <div class="label label4"><div class="label-text">Write a love note</div></div>
+                    <div class="label label5"><div class="label-text">Watch a movie</div></div>
+                    <div class="label label6"><div class="label-text">Dance on the famous song</div></div>
+                    <div class="label label7"><div class="label-text">Give me a name</div></div>
+                    <div class="label label8"><div class="label-text">Dedicate a song for me</div></div>
+                </div>
+                <div class="wheel-center">WIN</div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="spin-btn" id="spinBtn">SPIN!</button>
+            <a href="fun.html" class="back-btn">Back to HIM N I</a>
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="result-emoji" id="resultEmoji"></div>
+            <div class="result-text" id="resultTitle"></div>
+            <div class="result-description" id="resultDesc"></div>
+            <button class="close-btn" id="closeBtn">Got it! 💕</button>
+        </div>
+    </div>
+
+    <script>
+        const wheel = document.getElementById('wheel');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultModal = document.getElementById('resultModal');
+        const closeModal = document.getElementById('closeModal');
+        const closeBtn = document.getElementById('closeBtn');
+        const resultEmoji = document.getElementById('resultEmoji');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultDesc = document.getElementById('resultDesc');
+        const scrollDown = document.getElementById('scrollDown');
+
+        const segments = [
+            {
+                emoji: "💬",
+                title: "Tell me why you love me",
+                description: "Share 3 things you love about me. Make me blush! 😊"
+            },
+            {
+                emoji: "🎤",
+                title: "Send a voice note",
+                description: "Record a cute message or sing something for me! 💕"
+            },
+            {
+                emoji: "📅",
+                title: "Plan a date",
+                description: "Surprise me! Plan something special we can do together 🌹"
+            },
+            {
+                emoji: "💌",
+                title: "Write a love note",
+                description: "Write me something sweet. Leave it somewhere I'll find it 💕"
+            },
+            {
+                emoji: "🎬",
+                title: "Watch a movie",
+                description: "Cozy up and watch our favorite movie together 🍿"
+            },
+            {
+                emoji: "💃",
+                title: "Dance on the famous song",
+                description: "Show me your moves! Dance to a song together 🎵"
+            },
+            {
+                emoji: "👫",
+                title: "Give me a name",
+                description: "Give me a cute couple name that we can use 😊"
+            },
+            {
+                emoji: "🎶",
+                title: "Dedicate a song for me",
+                description: "Dedicate your favorite romantic song to me 💕"
+            }
+        ];
+
+        let isSpinning = false;
+
+        spinBtn.addEventListener('click', spinTheWheel);
+        closeModal.addEventListener('click', closePopup);
+        closeBtn.addEventListener('click', closePopup);
+        resultModal.addEventListener('click', function(event) {
+            if (event.target === resultModal) {
+                closePopup();
+            }
+        });
+
+        function spinTheWheel() {
+            if (isSpinning) return;
+
+            isSpinning = true;
+            spinBtn.disabled = true;
+            resultModal.classList.remove('show');
+
+            // Random segment selection (0-7)
+            const randomSegment = Math.floor(Math.random() * 8);
+            const segmentDegree = 45;
+            
+            // Random stop point within the segment (0 to 44.99 degrees)
+            const randomOffset = Math.random() * (segmentDegree - 0.1);
+            
+            // Calculate stop degree within the selected segment
+            const stopDegree = -(randomSegment * segmentDegree) - randomOffset;
+            
+            // Add 5 full rotations plus the stop position
+            const totalRotation = 1800 + stopDegree;
+            
+            wheel.style.setProperty('--rotation', totalRotation + 'deg');
+            wheel.classList.add('spinning');
+
+            setTimeout(() => {
+                wheel.classList.remove('spinning');
+                wheel.style.transform = `rotate(${totalRotation}deg)`;
+                
+                showResult(randomSegment);
+                isSpinning = false;
+                spinBtn.disabled = false;
+            }, 5000);
+        }
+
+        function showResult(segmentIndex) {
+            const result = segments[segmentIndex];
+            resultEmoji.textContent = result.emoji;
+            resultTitle.textContent = result.title;
+            resultDesc.textContent = result.description;
+            resultModal.classList.add('show');
+        }
+
+        function closePopup() {
+            resultModal.classList.remove('show');
+        }
+
+        // Initialize Floating Hearts Animation
+        function initializeHearts() {
+            const heartCount = 14;
+            const heartsDiv = document.getElementById('hearts');
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.textContent = '♥';
+                
+                let leftPercent;
+                if (i < heartCount * 0.4) {
+                    leftPercent = Math.random() * 45;
+                } else {
+                    leftPercent = 55 + Math.random() * 40;
+                }
+                
+                heart.style.left = `${leftPercent}%`;
+                heart.style.top = `${-20 + Math.random() * 40}vh`;
+                heart.style.animationDelay = `${Math.random() * 2.5}s`;
+                heart.style.animationDuration = `${4 + Math.random() * 2}s`;
+                heart.style.fontSize = `${1.7 + Math.random() * 1.6}em`;
+                
+                heartsDiv.appendChild(heart);
+            }
+        }
+
+        // Scroll Down Detection
+        function handleScroll() {
+            if (window.scrollY > 50) {
+                scrollDown.classList.add('hidden');
+            } else {
+                scrollDown.classList.remove('hidden');
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+
+        // Initialize on page load
+        window.addEventListener('load', initializeHearts);
+    </script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!-- FILE NAME: images.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 US 💕</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef, #ffecd2);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .container {
+            max-width: 400px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out;
+            position: relative;
+            z-index: 2;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #e91e63;
+            margin-bottom: 15px;
+            margin-top: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* NEW FLEX WRAPPER FOR OUTSIDE ARROWS */
+        .slider-flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .slider {
+            position: relative;
+            width: 300px;
+            height: 450px;
+            overflow: hidden;
+            margin: 0;
+            border-radius: 15px;
+        }
+
+        .images {
+            display: flex;
+            flex-direction: row;
+            transition: transform 0.5s ease;
+            width: calc(300px * 15);
+        }
+
+        img {
+            width: 300px;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .arrow-outside {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            font-size: 1.5em;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .arrow-outside:hover {
+            background: #c2185b;
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        button {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        button:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        /* Hearts Animation */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .floating-heart {
+            position: absolute;
+            color: #e91e63;
+            opacity: 0;
+            animation: floatUp 5s linear infinite;
+            will-change: transform, opacity;
+            user-select: none;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .slider {
+                width: 240px;
+                height: 360px;
+            }
+            img {
+                width: 240px;
+                height: 360px;
+            }
+            .images {
+                width: calc(240px * 15);
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hearts Animation -->
+    <div class="hearts" id="hearts"></div>
+
+    <div class="container">
+        <h1>💕 US 💕</h1>
+
+        <!-- NEW FLEX WRAPPER FOR ARROWS OUTSIDE -->
+        <div class="slider-flex">
+            <button class="arrow-outside" onclick="moveLeft()">←</button>
+
+            <div class="slider">
+                <div class="images" id="imageSlider">
+                    <!-- Replace with your GitHub image URLs -->
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/1.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/2.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/3.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/4.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/5.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/6.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/10.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/11.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/12.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/13.jpg.png">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/14.jpg.jpg">
+                    <img src="https://raw.githubusercontent.com/minions570-coder/Gugu/main/timepass/15.jpg.jpg">
+                </div>
+            </div>
+
+            <button class="arrow-outside" onclick="moveRight()">→</button>
+        </div>
+
+        <a href="Shy-girl-popup.html"><button>Back to suffer</button></a>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const images = document.getElementById('imageSlider');
+        const totalImages = images.children.length;
+
+        function moveLeft() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlider();
+            }
+        }
+
+        function moveRight() {
+            if (currentIndex < totalImages - 1) {
+                currentIndex++;
+                updateSlider();
+            }
+        }
+
+        function updateSlider() {
+            const translateX = -currentIndex * 300;
+            images.style.transform = `translateX(${translateX}px)`;
+        }
+
+        // Floating Hearts - RANDOM!
+        const heartCount = 14;
+        const heartsDiv = document.getElementById('hearts');
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.textContent = '♥';
+            let leftPercent;
+            if (i < heartCount * 0.4) {
+                leftPercent = Math.random() * 45;
+            } else {
+                leftPercent = 55 + Math.random() * 40;
+            }
+            heart.style.left = `${leftPercent}%`;
+            heart.style.top = `${-20 + Math.random() * 40}vh`;
+            heart.style.animationDelay = `${Math.random() * 2.5}s`;
+            heart.style.animationDuration = `${4 + Math.random() * 2}s`;
+            heart.style.fontSize = `${1.7 + Math.random() * 1.6}em`;
+            heartsDiv.appendChild(heart);
+        }
+    </script>
+</body>
+</html>

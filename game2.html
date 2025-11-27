@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chooseeeeeee</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef, #ffecd2);
+            font-family: 'Georgia', serif;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hearts Animation Background */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: #e91e63;
+            opacity: 0;
+            animation: floatUp 5s linear infinite;
+            will-change: transform, opacity;
+            user-select: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            animation: slideIn 0.5s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #e91e63;
+            margin-bottom: 20px;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .gif-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .gif-container img {
+            width: 200px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .question-container {
+            margin-bottom: 40px;
+        }
+
+        .question-text {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            padding: 15px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            background-color: #e91e63;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            outline: none;
+        }
+
+        .option-btn:focus {
+            outline: none;
+        }
+
+        .option-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(233, 30, 99, 0.4);
+        }
+
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+
+        .option-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .feedback {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            min-height: 30px;
+        }
+
+        .correct {
+            color: #4CAF50;
+        }
+
+        .wrong {
+            color: #f44336;
+        }
+
+        .next-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 0.95em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: none;
+            font-weight: 600;
+            margin-top: 10px;
+            outline: none;
+            margin-right: 10px;
+        }
+
+        .next-btn:focus {
+            outline: none;
+        }
+
+        .next-btn:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        .next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .next-btn.show {
+            display: inline-block;
+        }
+
+        .results-container {
+            display: none;
+            text-align: center;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .results-gif-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .results-gif-container img {
+            width: 250px;
+            height: auto;
+            border-radius: 15px;
+        }
+
+        .results-title {
+            font-size: 1.8em;
+            color: #e91e63;
+            margin-bottom: 20px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .result-image {
+            width: 280px;
+            height: auto;
+            border-radius: 15px;
+            margin: 20px auto;
+            animation: dance 0.6s infinite;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes dance {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+            }
+            25% {
+                transform: rotate(-5deg) scale(1.05);
+            }
+            50% {
+                transform: rotate(0deg) scale(1);
+            }
+            75% {
+                transform: rotate(5deg) scale(1.05);
+            }
+        }
+
+        .back-home-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 0.95em;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-right: 10px;
+            outline: none;
+        }
+
+        .back-home-btn:focus {
+            outline: none;
+        }
+
+        .back-home-btn:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        .back-btn-questions {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 0.95em;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            font-weight: 600;
+            margin-top: 20px;
+            outline: none;
+        }
+
+        .back-btn-questions:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #e91e63;
+            pointer-events: none;
+            animation: confettiFall 3s ease-out forwards;
+            z-index: 999;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotateZ(360deg);
+                opacity: 0;
+            }
+        }
+
+        .error-message {
+            font-size: 1.1em;
+            color: #f44336;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hearts Animation Background -->
+    <div class="hearts" id="hearts"></div>
+
+    <div class="container">
+        <h1>Chooseeeeeee 💕</h1>
+
+        <div class="question-container" id="questionContainer">
+            <div class="gif-container">
+                <img src="https://img1.joyreactor.com/pics/post/Pokemon-fandoms-choose-1858111.gif" alt="Choose GIF">
+            </div>
+
+            <div class="question-text" id="questionText"></div>
+            
+            <div class="options-container" id="optionsContainer"></div>
+
+            <div class="feedback" id="feedback"></div>
+            <div class="error-message" id="errorMessage">Please select an option!</div>
+            
+            <button class="next-btn" id="nextBtn">Next Question →</button>
+            <a href="fun.html" class="back-btn-questions">Back to HIM N I</a>
+        </div>
+
+        <div class="results-container" id="resultsContainer">
+            <div class="results-gif-container">
+                <img src="https://media.tenor.com/U6gdLEQahHEAAAAC/finished-anime.gif" alt="Finished GIF">
+            </div>
+
+            <div class="results-title">U finally chose 🖤ME🖤 over everything 😜😜</div>
+            <img class="result-image" id="resultImage" src="" alt="Result">
+            <div class="button-group">
+                <button class="next-btn show" id="restartBtn">Restart Quiz</button>
+                <a href="fun.html" class="back-home-btn">Back to HIM N I</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Ansh🤍 or Shreya?",
+                correct: "Ansh🤍",
+                wrong: "Shreya"
+            },
+            {
+                question: "Ansh🤍 or Cigarettes?",
+                correct: "Ansh🤍",
+                wrong: "Cigarettes"
+            },
+            {
+                question: "Ansh🤍 or Daru?",
+                correct: "Ansh🤍",
+                wrong: "Daru"
+            },
+            {
+                question: "Ansh🤍 or Sleep?",
+                correct: "Ansh🤍",
+                wrong: "Sleep"
+            },
+            {
+                question: "Ansh🤍 or Rave Party?",
+                correct: "Ansh🤍",
+                wrong: "Rave Party"
+            },
+            {
+                question: "Ansh🤍 or Paisa?",
+                correct: "Ansh🤍",
+                wrong: "Paisa"
+            },
+            {
+                question: "Ansh🤍 or Your Life?",
+                correct: "Ansh🤍",
+                wrong: "Your Life"
+            },
+            {
+                question: "Ansh🤍 or Long Drive?",
+                correct: "Ansh🤍",
+                wrong: "Long Drive"
+            },
+            {
+                question: "Ansh🤍 or Movies?",
+                correct: "Ansh🤍",
+                wrong: "Movies"
+            },
+            {
+                question: "Rin🤍 or Ansh?",
+                correct: "Rin🤍",
+                wrong: "Ansh"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionContainer = document.getElementById('questionContainer');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('nextBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const resultImage = document.getElementById('resultImage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function loadQuestion() {
+            answered = false;
+            errorMessage.style.display = 'none';
+            feedback.textContent = '';
+            feedback.className = '';
+            nextBtn.classList.remove('show');
+            
+            const q = questions[currentQuestion];
+            questionText.textContent = q.question;
+
+            const options = shuffleArray([q.correct, q.wrong]);
+            optionsContainer.innerHTML = '';
+
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.addEventListener('click', () => checkAnswer(option, q.correct));
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, correct) {
+            if (answered) return;
+
+            answered = true;
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selected === correct) {
+                feedback.textContent = '✓ Correct!';
+                feedback.className = 'correct';
+                score++;
+            } else {
+                feedback.textContent = '✗ Wrong! Select again...';
+                feedback.className = 'wrong';
+                answered = false;
+                buttons.forEach(btn => btn.disabled = false);
+                return;
+            }
+
+            nextBtn.classList.add('show');
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            questionContainer.style.display = 'none';
+            resultsContainer.classList.add('show');
+
+            resultImage.src = 'WhatsApp-Image-2025-11-26-at-14.14.23_5325c2e9.jpg';
+            resultImage.onerror = function() {
+                resultImage.style.display = 'none';
+            };
+
+            createConfetti();
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            questionContainer.style.display = 'block';
+            resultsContainer.classList.remove('show');
+            loadQuestion();
+        }
+
+        nextBtn.addEventListener('click', nextQuestion);
+        restartBtn.addEventListener('click', restartQuiz);
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = ['#e91e63', '#4CAF50', '#2196F3', '#FFC107', '#FF5722'][Math.floor(Math.random() * 5)];
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        // Initialize Floating Hearts Animation
+        function initializeHearts() {
+            const heartCount = 14;
+            const heartsDiv = document.getElementById('hearts');
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.textContent = '♥';
+                
+                let leftPercent;
+                if (i < heartCount * 0.4) {
+                    leftPercent = Math.random() * 45;
+                } else {
+                    leftPercent = 55 + Math.random() * 40;
+                }
+                
+                heart.style.left = `${leftPercent}%`;
+                heart.style.top = `${-20 + Math.random() * 40}vh`;
+                heart.style.animationDelay = `${Math.random() * 2.5}s`;
+                heart.style.animationDuration = `${4 + Math.random() * 2}s`;
+                heart.style.fontSize = `${1.7 + Math.random() * 1.6}em`;
+                
+                heartsDiv.appendChild(heart);
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initializeHearts();
+            loadQuestion();
+        });
+    </script>
+</body>
+</html>

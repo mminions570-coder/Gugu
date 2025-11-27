@@ -1,0 +1,639 @@
+<!-- FILE NAME: confidential-message.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIN'S Heart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef, #ffecd2);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+
+        .container {
+            max-width: 800px;
+            width: 85%;
+            height: 80vh;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out;
+            position: relative;
+            z-index: 2;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+
+        .container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+
+        .container::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+
+        .container::-webkit-scrollbar-thumb {
+            background: #e91e63;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+
+        .container::-webkit-scrollbar-thumb:hover {
+            background: #c2185b;
+        }
+
+
+        .main-heading {
+            font-size: 2.2em;
+            color: #e91e63;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.8s ease-out;
+            margin-top: 0;
+            flex-shrink: 0;
+        }
+
+
+        .heading {
+            font-size: 1.4em;
+            color: #e91e63;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.8s ease-out;
+            flex-shrink: 0;
+        }
+
+
+        .center-text {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            margin-top: 20px;
+            animation: slideDown 0.8s ease-out;
+            flex-shrink: 0;
+        }
+
+
+        .confidential-message {
+            font-size: 1.1em;
+            line-height: 2;
+            margin: 0;
+            animation: reveal 3s ease-in-out;
+            text-align: left;
+        }
+
+
+        .para {
+            margin-bottom: 25px;
+        }
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        @keyframes reveal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+
+        .response-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+
+        button {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            outline: none;
+        }
+
+
+        button:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+        }
+
+
+        .yes-btn {
+            background: #4CAF50;
+            flex: 1;
+            min-width: 150px;
+        }
+
+
+        .yes-btn:hover {
+            background: #45a049;
+        }
+
+
+        .no-btn {
+            background: #ff6b6b;
+            flex: 1;
+            min-width: 150px;
+            position: relative;
+        }
+
+
+        .no-btn:hover {
+            background: #ff5252;
+        }
+
+
+        .back-btn-container {
+            margin-top: 10px;
+        }
+
+
+        .back-btn {
+            background: #757575;
+            color: white;
+        }
+
+
+        .back-btn:hover {
+            background: #616161;
+        }
+
+
+        /* Success Popup */
+        .success-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 5000;
+            text-align: center;
+            animation: popupBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-width: 400px;
+            width: 85%;
+        }
+
+
+        .success-popup.show {
+            display: block;
+        }
+
+
+        .success-popup h2 {
+            font-size: 2em;
+            color: #e91e63;
+            margin: 15px 0;
+        }
+
+
+        .success-popup img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+
+
+        .success-popup p {
+            font-size: 1em;
+            color: #666;
+            margin: 12px 0;
+            font-weight: bold;
+        }
+
+
+        .success-popup button {
+            background: #4CAF50;
+            margin-top: 15px;
+            padding: 12px 25px;
+            font-size: 0.95em;
+        }
+
+
+        .success-popup button:hover {
+            background: #45a049;
+        }
+
+
+        @keyframes popupBounce {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+        }
+
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 4999;
+        }
+
+
+        .overlay.show {
+            display: block;
+        }
+
+
+        /* Hearts Animation */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+
+        .floating-heart {
+            position: absolute;
+            color: #e91e63;
+            opacity: 0;
+            animation: floatUp 5s linear infinite;
+            will-change: transform, opacity;
+            user-select: none;
+        }
+
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                height: 75vh;
+                padding: 20px;
+            }
+
+
+            .main-heading {
+                font-size: 1.6em;
+            }
+
+
+            .heading {
+                font-size: 1.1em;
+            }
+
+
+            .center-text {
+                font-size: 1.2em;
+            }
+
+
+            .confidential-message {
+                font-size: 0.95em;
+                line-height: 1.8;
+            }
+
+
+            .para {
+                margin-bottom: 20px;
+            }
+
+
+            button {
+                padding: 12px 25px;
+                font-size: 0.9em;
+            }
+
+
+            .response-buttons {
+                flex-direction: column;
+            }
+
+
+            .yes-btn, .no-btn {
+                min-width: auto;
+                width: 100%;
+            }
+
+
+            .success-popup {
+                padding: 25px 20px;
+                max-width: 350px;
+            }
+
+
+            .success-popup h2 {
+                font-size: 1.5em;
+            }
+
+
+            .success-popup img {
+                max-width: 250px;
+            }
+
+
+            .success-popup p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hearts Animation -->
+    <div class="hearts" id="hearts"></div>
+
+
+    <!-- Success Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="success-popup" id="successPopup">
+        <h2>YES FINALLY!!! 💕</h2>
+        <img src="https://th.bing.com/th/id/R.e16c097a8866184fa04e6c1545ef9621?rik=KJIzOXaJgOye9w&pid=ImgRaw&r=0" alt="YES!">
+        <p>🎉 I'M SO HAPPY!!! YOU SAID YES!!! 🎉</p>
+        <p>I LOVE YOU GUGU!!! FOREVER YOURS!!! 💚💚💚</p>
+        <button id="continueBtn">Continue 💕</button>
+    </div>
+
+
+    <div class="container">
+        <div class="main-heading">
+            RIN'S Heart
+        </div>
+
+        <div class="heading">
+            To My Absolute Favorite Gugu🤭
+        </div>
+
+        <div class="heading">
+            Who Also Happens to Be a Complete Nightmare😒😒
+        </div>
+
+
+        <div class="center-text">
+            UGHHHHHH!!!!
+        </div>
+
+
+        <div class="confidential-message">
+            <div class="para">Hi loude.... ssup.... hope you're always doing good 🤣 even without me 😂</div>
+
+
+            <div class="para">So here's the thing—I fucking don't know why I made this entire website for you 🙆‍♂🙆‍♂.....noun madak nurayent kelsa adav assignments adav but noun nand teli nod "nah let's build an entire website because we're madly in love and completely psycho" na idd en madateni chutiyapa🤦🤦....igg tiliyateti noun pyaar me andha hona issehi khehte hai....THIS IS IT. THIS IS IT BHAI😫😫</div>
+
+
+            <div class="para">Loude, 7 FUCKING YEARS....Approximately 2555 days antna itko of me being friends with you and I STILL regret being friends with you😓😓....no wonder at the same time I'm completely OBSESSED with you😁😁😁...uhhhh...</div>
+
+
+            <div class="para">Friends anta meet aagi, en eno nadasi, yelligo bandnieti😜😜.....Ni byada nang saak ni inna anno paristitiga band ninteni👉👈... andru ni bek nang... yak bek?? Aad nang gott illa...yak gott illa adu gott illa....noun, pronoun, adverb, adjective........</div>
+
+
+            <div class="para">Aad hoglibid but everything about you makes me feel more US💚💚...I feel so lucky and happy to have you around, andra I na matta wapis sann hudgi aagteni nin joti iddaga🐥🐥....... Yella moments ist chand nenap adav andra na nine manne, ning meet aageni anasteti.......And I never wanna forget ANY of them....Not a single moment.......n nin joti nakkida yella moments.....You make me feel HOME, Gugu.....Like I finally belong somewhere💚💚💚....nand yealla problems gu nin kade solution irat this makes me feel like my chaotic heart finally found its match😁😁😁......Every day with you feels like na wapis banglore daga irbek nin jodi same hanga😭😭😭😭.....</div>
+
+
+            <div class="para">Babe, thankyou for being the best part of my life.....Nand life daga ni idd illa andra en maadtide gott illa nang😭😭😭😭.....but ni iddag u en madateni gott illa.....ehehehehehehehehhe......but you being you....YOU ARE EVERYTHING.....You make me happy....You make me feel like ME......Like the BEST version of me💚💚💚</div>
+
+
+            <div class="para">I know I give you so much shit, so much attitude, so much of my complete nonsense andra ning na sakageni andru teli kedasko byada na en ning bitt hogudilla🤣🤣🤣......yak andra na matta ning bitt hode ni khush aadi andra😏😏😏....ang nin Khushi nodak aagudilla so byada....plan cancel.... nang gott na ning bhaal trass kodteni ant......mundanu kodkontna irteni ant teli kedaskobyada....🙂‍↔🙂‍↔</div>
+
+
+            <div class="para">Hogli bida hattra idak idan swalp yella side ga ida.....</div>
+
+
+            <div class="para">Will you be mine forever????</div>
+
+
+            <div class="para">Not just be my boyfriend.....Not just be my best friend....But BE MY FOREVER💚💚💚.....Be the person I wake up next to for the next 100 fucking years.....Be my forever person💚💚💚....the one that I wanna grow old and grey with.....The one I want to fight with, laugh with, build our entire life with....I want to legally claim you as MINE💚💚💚.......I want to say "this is MY ASSHOLE" with the biggest smile on my face......I want to make it official in front of the entire world that you're MY LOUDUUUU!!!!😁😁😁</div>
+
+
+            <div class="para">So what do you say, Gugu??? Will you be mine forever??? Will you say YES????</div>
+
+
+            <div class="para">If you say yes, I will forever be yours.....!!!!</div>
+
+
+            <div class="para">P.S. - My answer is already YES to everything about YOU.......Always has been......Always will be.......🤣🤣🤣</div>
+
+
+            <div class="para">P.P.S. - I'm expecting an actual YES because I just proposed on a WEBSITE that I BUILT FOR YOU....If you feel this isn't the most dramatic, unhinged, BEAUTIFUL proposal ever, then i dont want uhhhhh....nadi illinda ni😒😒😒</div>
+        </div>
+
+
+        <div class="button-container">
+            <div class="response-buttons">
+                <button class="yes-btn" id="yesBtn">💕 YES I LOVE YOU 💕</button>
+                <button class="no-btn" id="noBtn">❌ NO I NEED SOME TIME ❌</button>
+            </div>
+            <div class="back-btn-container">
+                <a href="Shy-girl-popup.html"><button class="back-btn">Back to suffer</button></a>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        let yesClickCount = 0;
+        const totalClicksNeeded = 7;
+
+
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const successPopup = document.getElementById('successPopup');
+        const overlay = document.getElementById('overlay');
+        const continueBtn = document.getElementById('continueBtn');
+
+
+        // YES Button - Confirm and show counter
+        yesBtn.addEventListener('click', () => {
+            yesClickCount++;
+
+
+            if (yesClickCount === totalClicksNeeded) {
+                showSuccessPopup();
+            }
+        });
+
+
+        // NO Button - Jump around randomly
+        noBtn.addEventListener('mouseenter', () => {
+            const randomX = Math.random() * (window.innerWidth - noBtn.offsetWidth - 50);
+            const randomY = Math.random() * (window.innerHeight - noBtn.offsetHeight - 50);
+
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = Math.max(10, randomX) + 'px';
+            noBtn.style.top = Math.max(10, randomY) + 'px';
+            noBtn.style.zIndex = '1000';
+        });
+
+
+        // Also jump on click for mobile
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const randomX = Math.random() * (window.innerWidth - noBtn.offsetWidth - 50);
+            const randomY = Math.random() * (window.innerHeight - noBtn.offsetHeight - 50);
+
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = Math.max(10, randomX) + 'px';
+            noBtn.style.top = Math.max(10, randomY) + 'px';
+            noBtn.style.zIndex = '1000';
+        });
+
+
+        function showSuccessPopup() {
+            overlay.classList.add('show');
+            successPopup.classList.add('show');
+            confetti();
+        }
+
+
+        continueBtn.addEventListener('click', () => {
+            window.location.href = 'Shy-girl-popup.html';
+        });
+
+
+        function confetti() {
+            const colors = ['#e91e63', '#ff9a9e', '#fecfef', '#ffecd2', '#ff69b4'];
+            for (let i = 0; i < 100; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.style.position = 'fixed';
+                confettiPiece.style.left = Math.random() * window.innerWidth + 'px';
+                confettiPiece.style.top = -10 + 'px';
+                confettiPiece.style.width = '10px';
+                confettiPiece.style.height = '10px';
+                confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confettiPiece.style.borderRadius = '50%';
+                confettiPiece.style.zIndex = '4998';
+                confettiPiece.style.pointerEvents = 'none';
+
+
+                document.body.appendChild(confettiPiece);
+
+
+                let velocity = Math.random() * 5 + 2;
+                let angle = Math.random() * Math.PI * 2;
+
+
+                const fall = setInterval(() => {
+                    let top = parseInt(confettiPiece.style.top);
+                    confettiPiece.style.top = top + velocity + 'px';
+                    confettiPiece.style.left = (parseInt(confettiPiece.style.left) + Math.sin(angle)) + 'px';
+
+
+                    if (top > window.innerHeight) {
+                        clearInterval(fall);
+                        confettiPiece.remove();
+                    }
+                }, 20);
+            }
+        }
+
+
+        // Floating Hearts - RANDOM!
+        const heartCount = 14;
+        const heartsDiv = document.getElementById('hearts');
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.textContent = '♥';
+            let leftPercent;
+            if (i < heartCount * 0.4) {
+                leftPercent = Math.random() * 45;
+            } else {
+                leftPercent = 55 + Math.random() * 40;
+            }
+            heart.style.left = `${leftPercent}%`;
+            heart.style.top = `${-20 + Math.random() * 40}vh`;
+            heart.style.animationDelay = `${Math.random() * 2.5}s`;
+            heart.style.animationDuration = `${4 + Math.random() * 2}s`;
+            heart.style.fontSize = `${1.7 + Math.random() * 1.6}em`;
+            heartsDiv.appendChild(heart);
+        }
+    </script>
+</body>
+</html>

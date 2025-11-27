@@ -1,0 +1,276 @@
+<!-- FILE NAME: Shy-girl-popup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Pop Typewriter</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-pink: #e91e63;
+            --color-pink-dark: #c2185b;
+            --color-gradient-1: #ff9a9e;
+            --color-gradient-2: #fecfef;
+            --color-gradient-3: #ffecd2;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, var(--color-gradient-1), var(--color-gradient-2), var(--color-gradient-3));
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .floating-heart {
+            position: absolute;
+            color: var(--color-pink);
+            opacity: 0;
+            font-family: 'Georgia', serif;
+            animation: floatUp 5s linear infinite;
+            will-change: transform, opacity;
+            user-select: none;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .banner-container {
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .banner {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--color-pink);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideDown 1s ease-out;
+            letter-spacing: 0.05em;
+            line-height: 1.4;
+        }
+
+        .banner-line1 {
+            margin-bottom: 10px;
+        }
+
+        .banner-line2 {
+            margin-top: 10px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 60px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+        .container:hover {
+            box-shadow: 0 16px 40px rgba(233,30,99,0.13),
+                        0 2px 4px rgba(233,30,99,0.05);
+        }
+        .message {
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1.4;
+            min-height: 80px;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 0;
+            justify-content: center;
+            align-items: center;
+        }
+        .letter {
+            display: inline-block;
+            animation:
+                popInInitial 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                continuousWave 2s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+            animation-delay: var(--delay), calc(var(--delay) + 0.5s);
+            color: var(--color-pink);
+            letter-spacing: -0.05em;
+            font-size: 3em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        @keyframes popInInitial {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes continuousWave {
+            0% {
+                transform: scale(1) translateY(0);
+            }
+            50% {
+                transform: scale(1) translateY(-20px);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+            }
+        }
+        .cartoon-wrapper {
+            flex-shrink: 0;
+            width: 180px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .cartoon-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column-reverse;
+                gap: 20px;
+            }
+            .cartoon-wrapper {
+                width: 140px;
+                height: 160px;
+            }
+            .container {
+                max-width: 100%;
+                padding: 40px 24px;
+            }
+            .message {
+                font-size: 32px;
+                min-height: 60px;
+            }
+            .banner {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="banner-container">
+        <div class="banner">
+            <div class="banner-line1">💕 IT'S OFFICIALLY 💕</div>
+            <div class="banner-line2">SEVEN YEARS NOW</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container" id="main-box">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
+                <div class="message" id="message"></div>
+            </div>
+        </div>
+        <div class="cartoon-wrapper">
+            <img src="https://c.tenor.com/ct2EJxa6PlYAAAAj/shy-cartoon.gif" alt="Shy Cartoon">
+        </div>
+    </div>
+    <script>
+        // Floating Hearts - RANDOM!
+        const heartCount = 14;
+        const heartsDiv = document.getElementById('hearts');
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.textContent = '♥';
+            let leftPercent;
+            if (i < heartCount * 0.4) {
+                leftPercent = Math.random() * 45;
+            } else {
+                leftPercent = 55 + Math.random() * 40;
+            }
+            heart.style.left = `${leftPercent}%`;
+            heart.style.top = `${-20 + Math.random() * 40}vh`;
+            heart.style.animationDelay = `${Math.random() * 2.5}s`;
+            heart.style.animationDuration = `${4 + Math.random() * 2}s`;
+            heart.style.fontSize = `${1.7 + Math.random() * 1.6}em`;
+            heartsDiv.appendChild(heart);
+        }
+        // Typewriter effect
+        const message = "Gugu";
+        const messageContainer = document.getElementById("message");
+        function playAnimation() {
+            messageContainer.innerHTML = "";
+            const letters = message.split("");
+            let letterCount = 0;
+            const typeInterval = setInterval(() => {
+                if (letterCount < letters.length) {
+                    const letterSpan = document.createElement("span");
+                    letterSpan.className = "letter";
+                    letterSpan.textContent = letters[letterCount];
+                    letterSpan.style.setProperty('--delay', `${letterCount * 0.08}s`);
+                    messageContainer.appendChild(letterSpan);
+                    letterCount++;
+                } else {
+                    clearInterval(typeInterval);
+                }
+            }, 300);
+        }
+        window.addEventListener("load", () => {
+            setTimeout(playAnimation, 300);
+        });
+
+        // On clicking box or word, redirect to index.html
+        document.getElementById('main-box').addEventListener('click', function() {
+            window.location.href = "Shy-girl-popup.html";
+        });
+    </script>
+</body>
+</html>
